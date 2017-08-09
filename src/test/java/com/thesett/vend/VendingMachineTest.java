@@ -80,7 +80,7 @@ public class VendingMachineTest {
     public void initialBalanceIsZeroAfterTurningOn() throws Exception {
         machine.setOn();
 
-        assertEquals(0, machine.getBalance());
+        assertEquals(0, machine.getUsersBalance());
     }
 
     @Test
@@ -88,12 +88,12 @@ public class VendingMachineTest {
         machine.setOn();
 
         for (int i = 0; i < 1000; i++) {
-            int oldBalance = machine.getBalance();
+            int oldBalance = machine.getUsersBalance();
 
             Coin randomCoin = getRandomCoin();
             machine.insertMoney(randomCoin);
 
-            int newBalance = machine.getBalance();
+            int newBalance = machine.getUsersBalance();
 
             assertEquals(oldBalance + randomCoin.getPenceValue(), newBalance);
         }
@@ -143,7 +143,7 @@ public class VendingMachineTest {
 
         machine.coinReturn();
 
-        assertEquals(0, machine.getBalance());
+        assertEquals(0, machine.getUsersBalance());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -198,6 +198,8 @@ public class VendingMachineTest {
 
         machine.vendItem(Item.A);
     }
+
+    // Check balance after vending is correct.
 
     public Coin getRandomCoin() {
         Coin[] coins = Coin.values();

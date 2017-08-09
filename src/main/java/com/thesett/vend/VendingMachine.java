@@ -44,7 +44,7 @@ public class VendingMachine {
         balance += coin.getPenceValue();
     }
 
-    public int getBalance() {
+    public int getUsersBalance() {
         return balance;
     }
 
