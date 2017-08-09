@@ -27,7 +27,12 @@ public class VendingMachine {
         state = State.Off;
     }
 
-    public void insertMoney(Coin coin) {
-        throw new IllegalStateException();
+    public void insertMoney(Coin coin) throws MachineIsOffException {
+        if (!isOn())
+            throw new MachineIsOffException();
+    }
+
+    public int getBalance() throws MachineIsOffException {
+        return 0;
     }
 }
