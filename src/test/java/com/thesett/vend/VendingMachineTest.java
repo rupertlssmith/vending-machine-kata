@@ -221,11 +221,18 @@ public class VendingMachineTest {
     public void cannotVendItemWithInsufficientChange() throws Exception {
         machine.setOn();
         machine.restockItem(Item.A, 10);
+
+        int machinesBalanceAtStart = machine.getMachinesBalance();
+
         machine.insertMoney(Coin.Pound);
         machine.insertMoney(Coin.Ten);
         machine.insertMoney(Coin.Twenty);
 
         machine.vendItem(Item.A);
+
+        int machinesBalanceAtEnd = machine.getMachinesBalance();
+
+        assertEquals(machinesBalanceAtStart, machinesBalanceAtEnd);
     }
 
     @Test
@@ -233,7 +240,7 @@ public class VendingMachineTest {
         machine.setOn();
         machine.restockItem(Item.A, 10);
 
-        int machineBalanceAtStart = machine.getMachinesBalance();
+        int machinesBalanceAtStart = machine.getMachinesBalance();
 
         machine.insertMoney(Coin.Fifty);
         machine.insertMoney(Coin.Ten);
@@ -241,9 +248,9 @@ public class VendingMachineTest {
 
         machine.vendItem(Item.A);
 
-        int machinesBalanaceAtEnd = machine.getMachinesBalance();
+        int machinesBalanceAtEnd = machine.getMachinesBalance();
 
-        assertEquals(machineBalanceAtStart + Item.A.getPenceValue(), machinesBalanaceAtEnd);
+        assertEquals(machinesBalanceAtStart + Item.A.getPenceValue(), machinesBalanceAtEnd);
     }
 
     public Coin getRandomCoin() {

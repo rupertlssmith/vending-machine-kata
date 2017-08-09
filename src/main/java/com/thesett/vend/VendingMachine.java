@@ -61,7 +61,7 @@ public class VendingMachine {
         int total = 0;
 
         for (Coin coin : Coin.values()) {
-            total += availableChange.getOrDefault(coin, 0);
+            total += availableChange.getOrDefault(coin, 0) * coin.getPenceValue();
         }
 
         return total;
@@ -72,7 +72,7 @@ public class VendingMachine {
             throw new MachineIsOffException();
         }
 
-        List<Coin> result =  new LinkedList<Coin>(insertedCoins);
+        List<Coin> result = new LinkedList<Coin>(insertedCoins);
 
         insertedCoins.clear();
 
@@ -92,7 +92,8 @@ public class VendingMachine {
         return availableItems.getOrDefault(item, 0);
     }
 
-    public void vendItem(Item item) throws MachineIsOffException, InsufficientStockException, InsufficientBalanceException {
+    public void vendItem(Item item)
+            throws MachineIsOffException, InsufficientStockException, InsufficientBalanceException, InsufficientChangeException {
         if (!isOn()) {
             throw new MachineIsOffException();
         }
@@ -101,8 +102,26 @@ public class VendingMachine {
             throw new InsufficientStockException();
         }
 
-        if (getUsersBalance() < item.getPenceValue()) {
+        int usersBalance = getUsersBalance();
+
+        if (usersBalance < item.getPenceValue()) {
             throw new InsufficientBalanceException();
         }
+
+        ChangeMaker changeMaker = new ChangeMaker(getAllAvailableCoins());
+        List<Coin> change = changeMaker.makeChange(usersBalance - item.getPenceValue() );
+
+        availableChange = changeMaker.changeRemaining();
+    }
+
+    private Map<Coin, Integer> getAllAvailableCoins() {
+        Map<Coin, Integer> result = new HashMap<Coin, Integer>(availableChange);
+
+        for (Coin coin : insertedCoins) {
+            int coinCount = result.getOrDefault(coin, 0);
+            result.put(coin, coinCount + 1);
+        }
+
+        return result;
     }
 }
