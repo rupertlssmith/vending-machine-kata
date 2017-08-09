@@ -176,6 +176,15 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
+    @Test(expected = InsufficientBalanceException.class)
+    public void cannotVendItemWithoutSufficientBalance() throws Exception {
+        machine.setOn();
+        machine.restockItem(Item.A, 10);
+        machine.insertMoney(Coin.Ten);
+
+        machine.vendItem(Item.A);
+    }
+
     public Coin getRandomCoin() {
         Coin[] coins = Coin.values();
         int index = random.nextInt(coins.length);

@@ -1,6 +1,6 @@
 package com.thesett.vend;
 
-public enum Item {
+public enum Item implements PenceValued {
     A(60),
     B(100),
     C(170);
