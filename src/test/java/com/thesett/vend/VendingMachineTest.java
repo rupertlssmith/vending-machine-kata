@@ -7,12 +7,16 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 /**
  * Unit tests for {@link VendingMachine}
  */
 public class VendingMachineTest {
 
     VendingMachine machine;
+
+    Random random = new Random();
 
     @Before
     public void setup() {
@@ -78,8 +82,25 @@ public class VendingMachineTest {
         assertEquals(0, machine.getBalance());
     }
 
+    @Test
     public void insertingMoneyIncreasesBalance() throws Exception {
-        machine.insertMoney(Coin.Ten);
-        machine.getBalance();
+        machine.setOn();
+
+        for (int i = 0; i < 1000; i++) {
+            int oldBalance = machine.getBalance();
+
+            Coin randomCoin = getRandomCoin();
+            machine.insertMoney(randomCoin);
+
+            int newBalance = machine.getBalance();
+
+            assertEquals(oldBalance + randomCoin.getPenceValue(), newBalance);
+        }
+    }
+
+    public Coin getRandomCoin() {
+        Coin[] coins = Coin.values();
+        int index = random.nextInt(coins.length);
+        return coins[index];
     }
 }

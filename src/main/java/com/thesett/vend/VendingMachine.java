@@ -11,6 +11,8 @@ public class VendingMachine {
 
     private State state = State.Off;
 
+    private int balance = 0;
+
     public VendingMachine() {
         super();
     }
@@ -28,11 +30,14 @@ public class VendingMachine {
     }
 
     public void insertMoney(Coin coin) throws MachineIsOffException {
-        if (!isOn())
+        if (!isOn()) {
             throw new MachineIsOffException();
+        }
+
+        balance += coin.getPenceValue();
     }
 
     public int getBalance() throws MachineIsOffException {
-        return 0;
+        return balance;
     }
 }
