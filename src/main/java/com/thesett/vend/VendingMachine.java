@@ -49,6 +49,24 @@ public class VendingMachine {
         return total;
     }
 
+    /**
+     * Note that the machines balance is the committed balance of the machines coins after a transaction
+     * has completed. So if the machine has 1 pound in it and the user has put in 50p, the machines balance will
+     * be 1 pound, until the user completes a purchase or 50p. Only after the purchase will the users balance transfer
+     * to the machine.
+     *
+     * @return The machines committed balance.
+     */
+    public int getMachinesBalance() {
+        int total = 0;
+
+        for (Coin coin : Coin.values()) {
+            total += availableChange.getOrDefault(coin, 0);
+        }
+
+        return total;
+    }
+
     public List<Coin> coinReturn() throws MachineIsOffException {
         if (!isOn()) {
             throw new MachineIsOffException();

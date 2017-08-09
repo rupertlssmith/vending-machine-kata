@@ -232,11 +232,18 @@ public class VendingMachineTest {
     public void successfullyVendItemWithCorrectChange() throws Exception {
         machine.setOn();
         machine.restockItem(Item.A, 10);
+
+        int machineBalanceAtStart = machine.getMachinesBalance();
+
         machine.insertMoney(Coin.Fifty);
         machine.insertMoney(Coin.Ten);
         machine.insertMoney(Coin.Twenty);
 
         machine.vendItem(Item.A);
+
+        int machinesBalanaceAtEnd = machine.getMachinesBalance();
+
+        assertEquals(machineBalanceAtStart + Item.A.getPenceValue(), machinesBalanaceAtEnd);
     }
 
     public Coin getRandomCoin() {
