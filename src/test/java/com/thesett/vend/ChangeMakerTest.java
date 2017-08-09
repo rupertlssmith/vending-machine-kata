@@ -24,6 +24,9 @@ public class ChangeMakerTest {
     public void changeForZeroIsAlwaysEmptyList() throws Exception {
         ChangeMaker changeMaker = new ChangeMaker(new HashMap<Coin, Integer>());
         changeMaker.makeChange(0);
+
+        int coinsValueAfter = valueOf(changeMaker.changeRemaining());
+        assertEquals(0, coinsValueAfter);
     }
 
     @Test
@@ -36,6 +39,9 @@ public class ChangeMakerTest {
             List<Coin> change = changeMaker.makeChange(coin.getPenceValue());
 
             assertEquals(coin.getPenceValue(), valueOf(change));
+
+            int coinsValueAfter = valueOf(changeMaker.changeRemaining());
+            assertEquals(0, coinsValueAfter);
         }
     }
 
@@ -51,6 +57,9 @@ public class ChangeMakerTest {
             List<Coin> change = changeMaker.makeChange(coin.getPenceValue() * stackSize);
 
             assertEquals(coin.getPenceValue() * stackSize, valueOf(change));
+
+            int coinsValueAfter = valueOf(changeMaker.changeRemaining());
+            assertEquals(0, coinsValueAfter);
         }
     }
 
@@ -79,10 +88,14 @@ public class ChangeMakerTest {
         Map<Coin, Integer> coins = new HashMap<Coin, Integer>();
         coins.put(Coin.Fifty, 100);
         coins.put(Coin.Twenty, 100);
+        int coinsValueBefore = valueOf(coins);
 
         ChangeMaker changeMaker = new ChangeMaker(coins);
         List<Coin> change = changeMaker.makeChange(80);
         assertEquals(80, valueOf(change));
+
+        int coinsValueAfter = valueOf(changeMaker.changeRemaining());
+        assertEquals(coinsValueBefore - 80, coinsValueAfter);
     }
 
     @Test
@@ -91,10 +104,37 @@ public class ChangeMakerTest {
         coins.put(Coin.Pound, 100);
         coins.put(Coin.Fifty, 100);
         coins.put(Coin.Twenty, 100);
+        int coinsValueBefore = valueOf(coins);
 
         ChangeMaker changeMaker = new ChangeMaker(coins);
         List<Coin> change = changeMaker.makeChange(180);
         assertEquals(180, valueOf(change));
+
+        int coinsValueAfter = valueOf(changeMaker.changeRemaining());
+        assertEquals(coinsValueBefore - 180, coinsValueAfter);
+    }
+
+
+    @Test
+    public void canNeverMakeChangeForValueHigherThanAvailableCoins() {
+        int stackSize = 10;
+
+        for (Coin coin : Coin.values()) {
+            Map<Coin, Integer> coins = new HashMap<Coin, Integer>();
+            coins.put(coin, stackSize);
+
+            ChangeMaker changeMaker = new ChangeMaker(coins);
+
+            boolean testPassed = false;
+
+            try {
+                changeMaker.makeChange((coin.getPenceValue() * stackSize) + 10);
+            } catch (InsufficientChangeException e) {
+                testPassed = true;
+            }
+
+            assertTrue(coin.toString(), testPassed);
+        }
     }
 
     private void tryBadCombination(Coin ten, int valueToChange) throws InsufficientChangeException {
@@ -105,13 +145,21 @@ public class ChangeMakerTest {
         changeMaker.makeChange(valueToChange);
     }
 
-    public void canNeverMakeChangeForValueHigherThanAvailableCoins() {}
-
     private int valueOf(List<Coin> coins) {
         int total = 0;
 
         for (Coin coin : coins) {
             total += coin.getPenceValue();
+        }
+
+        return total;
+    }
+
+    private int valueOf(Map<Coin, Integer> coins) {
+        int total = 0;
+
+        for (Coin coin : Coin.values()) {
+            total += coins.getOrDefault(coin, 0) * coin.getPenceValue();
         }
 
         return total;

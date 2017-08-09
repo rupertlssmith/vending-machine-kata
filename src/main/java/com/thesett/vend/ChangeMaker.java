@@ -23,7 +23,7 @@ public class ChangeMaker {
     }
 
     public Map<Coin, Integer> changeRemaining() {
-        throw new IllegalStateException();
+        return availableChange;
     }
 
     /**
@@ -45,10 +45,15 @@ public class ChangeMaker {
         for (int i = Coin.values().length - 1; i >= 0; i--) {
             Coin coin = Coin.values()[i];
 
-            if (availableChange.getOrDefault(coin, 0) > 0) {
+            int coinCount = availableChange.getOrDefault(coin, 0);
+
+            if (coinCount > 0) {
                 if (coin.getPenceValue() <= valueToChange) {
                     List<Coin> result = new LinkedList<Coin>();
                     result.add(coin);
+
+                    // Coins must be removed from the available change before the next iteration.
+                    availableChange.put(coin, coinCount - 1);
 
                     int remainder = valueToChange - coin.getPenceValue();
 
@@ -60,6 +65,11 @@ public class ChangeMaker {
                         if (remainingChange != null) {
                             result.addAll(remainingChange);
                             return result;
+                        }
+                        else {
+                            // If a branch fails to find a solution then the coins must be put back before
+                            // back-tracking or other branches will be affected by this one.
+                            availableChange.put(coin, coinCount);
                         }
                     }
                 }
