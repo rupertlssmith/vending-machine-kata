@@ -7,6 +7,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -96,6 +99,48 @@ public class VendingMachineTest {
 
             assertEquals(oldBalance + randomCoin.getPenceValue(), newBalance);
         }
+    }
+
+    @Test(expected = MachineIsOffException.class)
+    public void cannotReturnCoinsWhilstOff() throws Exception {
+        machine.coinReturn();
+    }
+
+    @Test
+    public void allInsertedCoinsAreReturned() throws Exception {
+        machine.setOn();
+
+        int[] insertedCoins = new int[Coin.values().length];
+
+        for (int i = 0; i < 1000; i++) {
+            Coin randomCoin = getRandomCoin();
+            machine.insertMoney(randomCoin);
+
+            int index = randomCoin.ordinal();
+
+            insertedCoins[index] = insertedCoins[index]++;
+        }
+
+        List<Coin> returnedCoins = machine.coinReturn();
+
+        for (Coin coin : returnedCoins) {
+            int index = coin.ordinal();
+
+            insertedCoins[index] = insertedCoins[index]--;
+        }
+
+        for (int i = 0 ; i < Coin.values().length; i++) {
+            assertEquals(0, insertedCoins[i]);
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void cannotModifyReturnedCoinList() throws Exception {
+        machine.setOn();
+        machine.insertMoney(Coin.Ten);
+        List<Coin> returnedCoins = machine.coinReturn();
+
+        returnedCoins.remove(0);
     }
 
     public Coin getRandomCoin() {

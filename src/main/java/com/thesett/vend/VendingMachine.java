@@ -1,5 +1,9 @@
 package com.thesett.vend;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Encapsulates the state of a vending machine and the operations that can be performed on it
  */
@@ -10,6 +14,8 @@ public class VendingMachine {
     }
 
     private State state = State.Off;
+
+    private List insertedCoins = new LinkedList();
 
     private int balance = 0;
 
@@ -39,5 +45,13 @@ public class VendingMachine {
 
     public int getBalance() throws MachineIsOffException {
         return balance;
+    }
+
+    public List<Coin> coinReturn() throws MachineIsOffException {
+        if (!isOn()) {
+            throw new MachineIsOffException();
+        }
+
+        return Collections.unmodifiableList(insertedCoins);
     }
 }
