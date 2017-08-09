@@ -19,11 +19,6 @@ public class VendingMachine {
 
     private Map<Item, Integer> availableItems = new HashMap<Item, Integer>();
 
-    private int balance = 0;
-
-    public VendingMachine() {
-    }
-
     public boolean isOn() {
         return State.On.equals(state);
     }
@@ -41,11 +36,17 @@ public class VendingMachine {
             throw new MachineIsOffException();
         }
 
-        balance += coin.getPenceValue();
+        insertedCoins.add(coin);
     }
 
     public int getUsersBalance() {
-        return balance;
+        int total = 0;
+
+        for (Coin coin : insertedCoins) {
+            total += coin.getPenceValue();
+        }
+
+        return total;
     }
 
     public List<Coin> coinReturn() throws MachineIsOffException {
@@ -53,7 +54,11 @@ public class VendingMachine {
             throw new MachineIsOffException();
         }
 
-        return Collections.unmodifiableList(insertedCoins);
+        List<Coin> result =  new LinkedList<Coin>(insertedCoins);
+
+        insertedCoins.clear();
+
+        return Collections.unmodifiableList(result);
     }
 
     public void restockItem(Item item, int numItemsToAdd) throws MachineIsOffException {
@@ -78,7 +83,7 @@ public class VendingMachine {
             throw new InsufficientStockException();
         }
 
-        if (balance < item.getPenceValue()) {
+        if (getUsersBalance() < item.getPenceValue()) {
             throw new InsufficientBalanceException();
         }
     }

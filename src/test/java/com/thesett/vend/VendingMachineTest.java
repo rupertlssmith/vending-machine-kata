@@ -116,7 +116,7 @@ public class VendingMachineTest {
 
             int index = randomCoin.ordinal();
 
-            insertedCoins[index] = insertedCoins[index]++;
+            insertedCoins[index] = insertedCoins[index] + 1;
         }
 
         List<Coin> returnedCoins = machine.coinReturn();
@@ -124,7 +124,7 @@ public class VendingMachineTest {
         for (Coin coin : returnedCoins) {
             int index = coin.ordinal();
 
-            insertedCoins[index] = insertedCoins[index]--;
+            insertedCoins[index] = insertedCoins[index] - 1;
         }
 
         for (int i = 0; i < Coin.values().length; i++) {
@@ -177,6 +177,24 @@ public class VendingMachineTest {
         }
     }
 
+    @Test
+    public void checkStockCountIsUpdatedAfterVending() throws Exception {
+        machine.setOn();
+
+        for (int i = 0; i < 1000; i++) {
+            Item randomItem = getRandomItem();
+
+            int oldStockCount = machine.getStockCount(randomItem);
+            int stockIncrease = random.nextInt(10);
+
+            machine.restockItem(randomItem, stockIncrease);
+
+            int newStockCount = machine.getStockCount(randomItem);
+
+            assertEquals(oldStockCount + stockIncrease, newStockCount);
+        }
+    }
+
     @Test(expected = MachineIsOffException.class)
     public void cannotVendWhilstOff() throws Exception {
         machine.vendItem(Item.A);
@@ -191,7 +209,7 @@ public class VendingMachineTest {
     }
 
     @Test(expected = InsufficientBalanceException.class)
-    public void cannotVendItemWithoutSufficientBalance() throws Exception {
+    public void cannotVendItemWithInsufficientBalance() throws Exception {
         machine.setOn();
         machine.restockItem(Item.A, 10);
         machine.insertMoney(Coin.Ten);
@@ -199,9 +217,26 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
+    @Test(expected = InsufficientChangeException.class)
+    public void cannotVendItemWithInsufficientChange() throws Exception {
+        machine.setOn();
+        machine.restockItem(Item.A, 10);
+        machine.insertMoney(Coin.Pound);
+        machine.insertMoney(Coin.Ten);
+        machine.insertMoney(Coin.Twenty);
+
+        machine.vendItem(Item.A);
+    }
+
     @Test
-    public void checkStockCountIsUpdatedAfterVending() {
-        throw new IllegalStateException();
+    public void successfullyVendItemWithCorrectChange() throws Exception {
+        machine.setOn();
+        machine.restockItem(Item.A, 10);
+        machine.insertMoney(Coin.Fifty);
+        machine.insertMoney(Coin.Ten);
+        machine.insertMoney(Coin.Twenty);
+
+        machine.vendItem(Item.A);
     }
 
     public Coin getRandomCoin() {
