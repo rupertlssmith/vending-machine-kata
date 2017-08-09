@@ -13,6 +13,32 @@ public class ChangeMaker {
     }
 
     public List<Coin> makeChange(int valueToChange) throws InsufficientChangeException {
+        List<Coin> result = makeChangeInner(valueToChange);
+
+        if (result == null) {
+            throw new InsufficientChangeException();
+        }
+
+        return result;
+    }
+
+    public Map<Coin, Integer> changeRemaining() {
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Implements a recursive change-making algorithm.
+     * <p>
+     * Note: Using <tt>null</tt> as a return value to indicate failure to find a solution is less than ideal.
+     * The alternatives would be to use an exception for flow-control, which is also less than ideal, or to return
+     * the list of coins and an indication of whether a solution was found as a pair, which is a little inconvenient
+     * in Java.
+     *
+     * @return A list of coins making change when a solution can be found. If the value of change to be
+     * made is zero, and empty list will be returned. If no solution can be found, <tt>null</tt>
+     * will be returned to indicate this special case.
+     */
+    private List<Coin> makeChangeInner(int valueToChange) throws InsufficientChangeException {
         if (valueToChange == 0)
             return new LinkedList<Coin>();
 
@@ -29,17 +55,17 @@ public class ChangeMaker {
                     if (remainder == 0)
                         return result;
                     else {
-                        result.addAll(makeChange(remainder));
-                        return result;
+                        List<Coin> remainingChange = makeChangeInner(remainder);
+
+                        if (remainingChange != null) {
+                            result.addAll(remainingChange);
+                            return result;
+                        }
                     }
                 }
             }
         }
 
-        throw new InsufficientChangeException();
+        return null;
     }
-
-//    public Map<Coin, Integer> changeRemaining() {
-//        throw new IllegalStateException();
-//    }
 }
