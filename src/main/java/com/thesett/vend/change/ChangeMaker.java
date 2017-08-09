@@ -1,7 +1,7 @@
 package com.thesett.vend.change;
 
 import com.thesett.vend.Coin;
-import com.thesett.vend.InsufficientChangeException;
+import com.thesett.vend.CannotMakeChangeException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,11 +15,11 @@ public class ChangeMaker {
         this.availableChange = new HashMap<Coin, Integer>(availableChange);
     }
 
-    public List<Coin> makeChange(int valueToChange) throws InsufficientChangeException {
+    public List<Coin> makeChange(int valueToChange) throws CannotMakeChangeException {
         List<Coin> result = makeChangeInner(valueToChange);
 
         if (result == null) {
-            throw new InsufficientChangeException();
+            throw new CannotMakeChangeException();
         }
 
         return result;
@@ -41,7 +41,7 @@ public class ChangeMaker {
      * made is zero, and empty list will be returned. If no solution can be found, <tt>null</tt>
      * will be returned to indicate this special case.
      */
-    private List<Coin> makeChangeInner(int valueToChange) throws InsufficientChangeException {
+    private List<Coin> makeChangeInner(int valueToChange) throws CannotMakeChangeException {
         if (valueToChange == 0)
             return new LinkedList<Coin>();
 

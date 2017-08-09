@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import com.thesett.vend.Coin;
-import com.thesett.vend.InsufficientChangeException;
+import com.thesett.vend.CannotMakeChangeException;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import java.util.Map;
  * Unit tests for {@link ChangeMaker}
  */
 public class ChangeMakerTest {
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotMakeChangeFromNoCoins() throws Exception {
         ChangeMaker changeMaker = new ChangeMaker(new HashMap<Coin, Integer>());
         changeMaker.makeChange(20);
@@ -64,22 +64,22 @@ public class ChangeMakerTest {
         }
     }
 
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotMakeChangeFor15OutOf10s() throws Exception {
         tryBadCombination(Coin.Ten, 15);
     }
 
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotMakeChangeFor30OutOf20s() throws Exception {
         tryBadCombination(Coin.Twenty, 30);
     }
 
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotMakeChangeFor80OutOf50s() throws Exception {
         tryBadCombination(Coin.Fifty, 80);
     }
 
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotMakeChangeFor150OutOf100s() throws Exception {
         tryBadCombination(Coin.Pound, 150);
     }
@@ -130,7 +130,7 @@ public class ChangeMakerTest {
 
             try {
                 changeMaker.makeChange((coin.getPenceValue() * stackSize) + 10);
-            } catch (InsufficientChangeException e) {
+            } catch (CannotMakeChangeException e) {
                 testPassed = true;
             }
 
@@ -138,7 +138,7 @@ public class ChangeMakerTest {
         }
     }
 
-    private void tryBadCombination(Coin ten, int valueToChange) throws InsufficientChangeException {
+    private void tryBadCombination(Coin ten, int valueToChange) throws CannotMakeChangeException {
         Map<Coin, Integer> coins = new HashMap<Coin, Integer>();
         coins.put(ten, 100);
 

@@ -95,19 +95,19 @@ public class VendingMachine {
     }
 
     public void vendItem(Item item)
-            throws MachineIsOffException, InsufficientStockException, InsufficientBalanceException, InsufficientChangeException {
+            throws MachineIsOffException, OutOfStock, InsufficientMoneyException, CannotMakeChangeException {
         if (!isOn()) {
             throw new MachineIsOffException();
         }
 
         if (getStockCount(item) < 1) {
-            throw new InsufficientStockException();
+            throw new OutOfStock();
         }
 
         int usersBalance = getUsersBalance();
 
         if (usersBalance < item.getPenceValue()) {
-            throw new InsufficientBalanceException();
+            throw new InsufficientMoneyException();
         }
 
         ChangeMaker changeMaker = new ChangeMaker(getAllAvailableCoins());

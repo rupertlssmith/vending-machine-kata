@@ -200,7 +200,7 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
-    @Test(expected = InsufficientStockException.class)
+    @Test(expected = OutOfStock.class)
     public void cannotVendItemOutOfStock() throws Exception {
         machine.setOn();
 
@@ -208,7 +208,7 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
-    @Test(expected = InsufficientBalanceException.class)
+    @Test(expected = InsufficientMoneyException.class)
     public void cannotVendItemWithInsufficientBalance() throws Exception {
         machine.setOn();
         machine.restockItem(Item.A, 10);
@@ -217,7 +217,7 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
-    @Test(expected = InsufficientChangeException.class)
+    @Test(expected = CannotMakeChangeException.class)
     public void cannotVendItemWithInsufficientChange() throws Exception {
         machine.setOn();
         machine.restockItem(Item.A, 10);
