@@ -81,7 +81,8 @@ public class ChangeMakerTest {
         coins.put(Coin.Twenty, 100);
 
         ChangeMaker changeMaker = new ChangeMaker(coins);
-        changeMaker.makeChange(80);
+        List<Coin> change = changeMaker.makeChange(80);
+        assertEquals(80, valueOf(change));
     }
 
     @Test
@@ -92,7 +93,8 @@ public class ChangeMakerTest {
         coins.put(Coin.Twenty, 100);
 
         ChangeMaker changeMaker = new ChangeMaker(coins);
-        changeMaker.makeChange(180);
+        List<Coin> change = changeMaker.makeChange(180);
+        assertEquals(180, valueOf(change));
     }
 
     private void tryBadCombination(Coin ten, int valueToChange) throws InsufficientChangeException {
