@@ -253,13 +253,13 @@ public class VendingMachineTest {
         assertEquals(machinesBalanceAtStart + Item.A.getPenceValue(), machinesBalanceAtEnd);
     }
 
-    public Coin getRandomCoin() {
+    private Coin getRandomCoin() {
         Coin[] coins = Coin.values();
         int index = random.nextInt(coins.length);
         return coins[index];
     }
 
-    public Item getRandomItem() {
+    private Item getRandomItem() {
         Item[] items = Item.values();
         int index = random.nextInt(items.length);
         return items[index];
