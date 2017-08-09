@@ -1,6 +1,6 @@
 package com.thesett.vend;
 
-public enum Coin implements PenceValued {
+public enum Coin {
     Ten(10),
     Twenty(20),
     Fifty(50),
