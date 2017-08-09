@@ -86,7 +86,7 @@ public class VendingMachineTest {
     }
 
     @Test
-    public void insertingMoneyIncreasesBalance() throws Exception {
+    public void insertingMoneyIncreasesBalanceCorrectly() throws Exception {
         machine.setOn();
 
         for (int i = 0; i < 1000; i++) {
