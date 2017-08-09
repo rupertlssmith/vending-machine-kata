@@ -127,9 +127,23 @@ public class VendingMachineTest {
             insertedCoins[index] = insertedCoins[index]--;
         }
 
-        for (int i = 0 ; i < Coin.values().length; i++) {
+        for (int i = 0; i < Coin.values().length; i++) {
             assertEquals(0, insertedCoins[i]);
         }
+    }
+
+    @Test
+    public void balanceIsZeroAfterReturningCoins() throws Exception {
+        machine.setOn();
+
+        for (int i = 0; i < 1000; i++) {
+            Coin randomCoin = getRandomCoin();
+            machine.insertMoney(randomCoin);
+        }
+
+        machine.coinReturn();
+
+        assertEquals(0, machine.getBalance());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -154,7 +168,7 @@ public class VendingMachineTest {
             Item item = getRandomItem();
             int oldStockCount = machine.getStockCount(item);
 
-            int numToRestock = random.nextInt(10)+1;
+            int numToRestock = random.nextInt(10) + 1;
             machine.restockItem(item, numToRestock);
 
             int newStockCount = machine.getStockCount(item);
