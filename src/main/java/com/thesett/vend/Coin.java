@@ -9,7 +9,7 @@ public enum Coin {
     private final int pence;
 
     Coin(int pence) {
-        this.pence=pence;
+        this.pence = pence;
     }
 
     public int getPenceValue() {

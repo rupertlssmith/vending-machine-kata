@@ -1,4 +1,4 @@
 package com.thesett.vend;
 
-public class InsufficientChangeException {
+public class InsufficientChangeException extends Exception {
 }

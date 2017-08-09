@@ -199,7 +199,10 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
-    // Check balance after vending is correct.
+    @Test
+    public void checkStockCountIsUpdatedAfterVending() {
+        throw new IllegalStateException();
+    }
 
     public Coin getRandomCoin() {
         Coin[] coins = Coin.values();
