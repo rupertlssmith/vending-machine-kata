@@ -7,9 +7,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -148,10 +146,37 @@ public class VendingMachineTest {
         machine.vendItem(Item.A);
     }
 
+    @Test(expected = MachineIsOffException.class)
+    public void cannotRestockWhilstOff() throws Exception {
+        machine.restockItem(Item.A, 100);
+    }
+
+    @Test
+    public void restockingItemsIncreasesStockCorrectly() throws Exception {
+        machine.setOn();
+
+        for (int i = 0; i < 1000; i++) {
+            Item item = getRandomItem();
+            int oldStockCount = machine.getStockCount(item);
+
+            int numToRestock = random.nextInt(10)+1;
+            machine.restockItem(item, numToRestock);
+
+            int newStockCount = machine.getStockCount(item);
+
+            assertEquals(oldStockCount + numToRestock, newStockCount);
+        }
+    }
 
     public Coin getRandomCoin() {
         Coin[] coins = Coin.values();
         int index = random.nextInt(coins.length);
         return coins[index];
+    }
+
+    public Item getRandomItem() {
+        Item[] items = Item.values();
+        int index = random.nextInt(items.length);
+        return items[index];
     }
 }
