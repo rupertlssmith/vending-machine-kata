@@ -142,11 +142,6 @@ public class VendingMachineTest {
     }
 
     @Test(expected = MachineIsOffException.class)
-    public void cannotVendWhilstOff() throws Exception {
-        machine.vendItem(Item.A);
-    }
-
-    @Test(expected = MachineIsOffException.class)
     public void cannotRestockWhilstOff() throws Exception {
         machine.restockItem(Item.A, 100);
     }
@@ -166,6 +161,19 @@ public class VendingMachineTest {
 
             assertEquals(oldStockCount + numToRestock, newStockCount);
         }
+    }
+
+    @Test(expected = MachineIsOffException.class)
+    public void cannotVendWhilstOff() throws Exception {
+        machine.vendItem(Item.A);
+    }
+
+    @Test(expected = InsufficientStockException.class)
+    public void cannotVendItemOutOfStock() throws Exception {
+        machine.setOn();
+
+        assertEquals(0, machine.getStockCount(Item.A));
+        machine.vendItem(Item.A);
     }
 
     public Coin getRandomCoin() {

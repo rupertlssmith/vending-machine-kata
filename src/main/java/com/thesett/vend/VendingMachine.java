@@ -69,9 +69,13 @@ public class VendingMachine {
         return availableItems.getOrDefault(item, 0);
     }
 
-    public void vendItem(Item item) throws MachineIsOffException {
+    public void vendItem(Item item) throws MachineIsOffException, InsufficientStockException {
         if (!isOn()) {
             throw new MachineIsOffException();
+        }
+
+        if (getStockCount(item) < 1) {
+            throw new InsufficientStockException();
         }
     }
 }
