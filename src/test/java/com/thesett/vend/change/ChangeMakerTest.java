@@ -1,9 +1,10 @@
-package com.thesett.vend;
+package com.thesett.vend.change;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
+import com.thesett.vend.Coin;
+import com.thesett.vend.InsufficientChangeException;
 import org.junit.Test;
 
 import java.util.HashMap;

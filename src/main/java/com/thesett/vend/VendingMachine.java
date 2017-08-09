@@ -1,5 +1,7 @@
 package com.thesett.vend;
 
+import com.thesett.vend.change.ChangeMaker;
+
 import java.util.*;
 
 /**

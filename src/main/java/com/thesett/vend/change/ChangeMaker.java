@@ -1,4 +1,7 @@
-package com.thesett.vend;
+package com.thesett.vend.change;
+
+import com.thesett.vend.Coin;
+import com.thesett.vend.InsufficientChangeException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
