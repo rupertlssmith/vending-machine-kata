@@ -143,6 +143,12 @@ public class VendingMachineTest {
         returnedCoins.remove(0);
     }
 
+    @Test(expected = MachineIsOffException.class)
+    public void cannotVendWhilstOff() throws Exception {
+        machine.vendItem(Item.A);
+    }
+
+
     public Coin getRandomCoin() {
         Coin[] coins = Coin.values();
         int index = random.nextInt(coins.length);

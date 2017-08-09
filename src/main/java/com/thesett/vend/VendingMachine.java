@@ -54,4 +54,10 @@ public class VendingMachine {
 
         return Collections.unmodifiableList(insertedCoins);
     }
+
+    public void vendItem(Item item) throws MachineIsOffException {
+        if (!isOn()) {
+            throw new MachineIsOffException();
+        }
+    }
 }
